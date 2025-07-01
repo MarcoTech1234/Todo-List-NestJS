@@ -7,3 +7,26 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model ticket {
+  id       String       @id
+  topic    String
+  date     DateTime
+  createAt DateTime
+  status   TicketStatus
+  comments Comments[]
+}
+
+enum TicketStatus {
+  TODO
+  DOING
+  DONE
+}
+
+model Comments {
+  id       String   @id
+  message  String
+  date     DateTime
+  ticket   ticket   @relation(fields: [ticketId], references: [id])
+  ticketId String
+}

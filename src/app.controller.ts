@@ -1,12 +1,21 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Head, Res } from '@nestjs/common';
+import { ApiExcludeController } from '@nestjs/swagger';
+import { FastifyReply } from 'fastify';
 
+@ApiExcludeController()
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  @Head()
+  checkHealth() {
+    return 'OK';
+  }
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  helloWorld(@Res() reply: FastifyReply) {
+    reply.type('text/html; charset=utf-8').send(/* HTML */ `
+      <h2>Hello World!</h2>
+      <p>Para acessar a documentação da API</p>
+      <a href="/docs">clique aqui!</a>
+    `);
   }
 }
